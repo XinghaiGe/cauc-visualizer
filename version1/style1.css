@@ -1,0 +1,45 @@
+/* 确保页面高度不超过屏幕 */
+html,
+body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    /* 防止页面滚动 */
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+}
+
+.code-line {
+    padding: 2px 0;
+    transition: background-color 0.3s ease;
+}
+
+.highlight {
+    background-color: #fff0b3;
+    /* 浅黄色高亮 */
+    font-weight: bold;
+}
+
+/* 自定义滚动条样式 */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
