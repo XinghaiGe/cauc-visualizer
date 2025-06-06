@@ -375,7 +375,7 @@ function updateVisualization() {
     // 控制按钮的启用/禁用状态
     prevButton.disabled = currentStepIndex === 0;
     nextButton.disabled = currentStepIndex === steps.length - 1;
-    stopButton.disabled = animationInterval === null; // 只有在动画运行时才启用停止按钮
+    // stopButton.disabled = animationInterval === null; // 只有在动画运行时才启用停止按钮
 }
 
 /**
@@ -494,9 +494,9 @@ nextButton.addEventListener('click', () => {
     }
 });
 
-stopButton.addEventListener('click', () => {
-    stopAnimation();
-});
+// stopButton.addEventListener('click', () => {
+//     stopAnimation();
+// });
 
 // 页面加载完成后初始化
 window.onload = () => {
