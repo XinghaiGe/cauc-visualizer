@@ -867,6 +867,7 @@ algorithmSelect.addEventListener('change', (event) => {
 });
 
 startButton.addEventListener('click', () => {
+    const intervalTime = document.getElementById('interval-time').value;
     // 停止之前的动画（如果存在）
     stopAnimation();
     
@@ -885,7 +886,7 @@ startButton.addEventListener('click', () => {
             // 如果到达最后一步，停止动画
             stopAnimation();
         }
-    }, 1500);
+    }, intervalTime);
 });
 resetButton.addEventListener('click', () => {
     initialize();
