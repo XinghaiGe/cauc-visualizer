@@ -38,10 +38,10 @@ compareButton.addEventListener('click', () => {
         'mergeSort', 'quickSort', 'heapSort',
         'shellSort', 'countingSort', 'radixSort'
     ]));
-    
+
     const intervalTime = document.getElementById('interval-time').value;
     localStorage.setItem('intervalTime', intervalTime);
-    
+
     // 跳转到排序算法对比界面
     window.location.href = 'compare.html';
 });
@@ -320,17 +320,17 @@ function selectionSortAlgorithm(arr) {
 
     for (let i = 0; i < n - 1; i++) {
         let minIndex = i;
-        recordStep(arr, `寻找第 ${i + 1} 轮最小元素 (当前最小索引: ${minIndex})`, [3], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === minIndex? BAR_COLOR_COMPARING : c));
+        recordStep(arr, `寻找第 ${i + 1} 轮最小元素 (当前最小索引: ${minIndex})`, [3], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === minIndex ? BAR_COLOR_COMPARING : c));
         for (let j = i + 1; j < n; j++) {
-            recordStep(arr, `比较 ${arr[j]} 和 ${arr[minIndex]}`, [5], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => (idx === j || idx === minIndex)? BAR_COLOR_COMPARING : c));
+            recordStep(arr, `比较 ${arr[j]} 和 ${arr[minIndex]}`, [5], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => (idx === j || idx === minIndex) ? BAR_COLOR_COMPARING : c));
             if (arr[j] < arr[minIndex]) {
                 minIndex = j;
-                recordStep(arr, `更新最小索引为 ${minIndex}`, [6], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === minIndex? BAR_COLOR_COMPARING : c));
+                recordStep(arr, `更新最小索引为 ${minIndex}`, [6], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === minIndex ? BAR_COLOR_COMPARING : c));
             }
         }
-        recordStep(arr, `交换 ${arr[i]} 和 ${arr[minIndex]}`, [8], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => (idx === i || idx === minIndex)? BAR_COLOR_SWAPPING : c));
+        recordStep(arr, `交换 ${arr[i]} 和 ${arr[minIndex]}`, [8], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => (idx === i || idx === minIndex) ? BAR_COLOR_SWAPPING : c));
         [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
-        recordStep(arr, `交换完成，元素 ${arr[i]} 已排序`, [8], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx <= i? BAR_COLOR_SORTED : c));
+        recordStep(arr, `交换完成，元素 ${arr[i]} 已排序`, [8], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx <= i ? BAR_COLOR_SORTED : c));
     }
     recordStep(arr, "选择排序完成", [9], Array(n).fill(BAR_COLOR_SORTED));
 }
@@ -345,14 +345,14 @@ function bubbleSortAlgorithm(arr) {
 
     for (let i = 0; i < n - 1; i++) {
         for (let j = 0; j < n - i - 1; j++) {
-            recordStep(arr, `比较 ${arr[j]} 和 ${arr[j + 1]}`, [4], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => (idx === j || idx === j + 1)? BAR_COLOR_COMPARING : c));
+            recordStep(arr, `比较 ${arr[j]} 和 ${arr[j + 1]}`, [4], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => (idx === j || idx === j + 1) ? BAR_COLOR_COMPARING : c));
             if (arr[j] > arr[j + 1]) {
-                recordStep(arr, `交换 ${arr[j]} 和 ${arr[j + 1]}`, [6], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => (idx === j || idx === j + 1)? BAR_COLOR_SWAPPING : c));
+                recordStep(arr, `交换 ${arr[j]} 和 ${arr[j + 1]}`, [6], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => (idx === j || idx === j + 1) ? BAR_COLOR_SWAPPING : c));
                 [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-                recordStep(arr, `交换完成`, [6], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => (idx === j || idx === j + 1)? BAR_COLOR_SWAPPING : c));
+                recordStep(arr, `交换完成`, [6], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => (idx === j || idx === j + 1) ? BAR_COLOR_SWAPPING : c));
             }
         }
-        recordStep(arr, `第 ${i + 1} 轮冒泡完成，最大元素已移到末尾`, [8], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx >= n - i - 1? BAR_COLOR_SORTED : c));
+        recordStep(arr, `第 ${i + 1} 轮冒泡完成，最大元素已移到末尾`, [8], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx >= n - i - 1 ? BAR_COLOR_SORTED : c));
     }
     recordStep(arr, "冒泡排序完成", [9], Array(n).fill(BAR_COLOR_SORTED));
 }
@@ -368,15 +368,15 @@ function insertionSortAlgorithm(arr) {
     for (let i = 1; i < n; i++) {
         const key = arr[i];
         let j = i - 1;
-        recordStep(arr, `将元素 ${key} (索引 ${i}) 插入到已排序部分`, [3], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === i? BAR_COLOR_COMPARING : c));
+        recordStep(arr, `将元素 ${key} (索引 ${i}) 插入到已排序部分`, [3], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === i ? BAR_COLOR_COMPARING : c));
         while (j >= 0 && arr[j] > key) {
-            recordStep(arr, `比较 ${arr[j]} 和 ${key}`, [5], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => (idx === j || idx === i)? BAR_COLOR_COMPARING : c));
+            recordStep(arr, `比较 ${arr[j]} 和 ${key}`, [5], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => (idx === j || idx === i) ? BAR_COLOR_COMPARING : c));
             arr[j + 1] = arr[j];
-            recordStep(arr, `元素 ${arr[j]} (索引 ${j}) 后移到索引 ${j + 1}`, [6], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === j + 1? BAR_COLOR_SWAPPING : c));
+            recordStep(arr, `元素 ${arr[j]} (索引 ${j}) 后移到索引 ${j + 1}`, [6], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === j + 1 ? BAR_COLOR_SWAPPING : c));
             j--;
         }
         arr[j + 1] = key;
-        recordStep(arr, `将 ${key} 插入到索引 ${j + 1}`, [8], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === j + 1? BAR_COLOR_SWAPPING : c));
+        recordStep(arr, `将 ${key} 插入到索引 ${j + 1}`, [8], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === j + 1 ? BAR_COLOR_SWAPPING : c));
     }
     recordStep(arr, "插入排序完成", [9], Array(n).fill(BAR_COLOR_SORTED));
 }
@@ -391,22 +391,22 @@ function mergeSortAlgorithm(arr) {
         const left = arr.slice(0, mid);
         const right = arr.slice(mid);
 
-        recordStep(arr, `分割数组为左子数组 [${left}] 和右子数组 [${right}]`, [3], Array(arr.length).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx < mid? BAR_COLOR_COMPARING : BAR_COLOR_DEFAULT));
+        recordStep(arr, `分割数组为左子数组 [${left}] 和右子数组 [${right}]`, [3], Array(arr.length).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx < mid ? BAR_COLOR_COMPARING : BAR_COLOR_DEFAULT));
         mergeSortAlgorithm(left);
         mergeSortAlgorithm(right);
 
         let i = 0, j = 0, k = 0;
         recordStep(arr, "合并左子数组和右子数组", [5], Array(arr.length).fill(BAR_COLOR_DEFAULT));
         while (i < left.length && j < right.length) {
-            recordStep(arr, `比较 ${left[i]} 和 ${right[j]}`, [7], Array(arr.length).fill(BAR_COLOR_DEFAULT).map((c, idx) => (idx === k? BAR_COLOR_COMPARING : c)));
+            recordStep(arr, `比较 ${left[i]} 和 ${right[j]}`, [7], Array(arr.length).fill(BAR_COLOR_DEFAULT).map((c, idx) => (idx === k ? BAR_COLOR_COMPARING : c)));
             if (left[i] < right[j]) {
                 arr[k] = left[i];
                 i++;
-                recordStep(arr, `${left[i - 1]} 较小，放入数组`, [8], Array(arr.length).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === k? BAR_COLOR_SWAPPING : c));
+                recordStep(arr, `${left[i - 1]} 较小，放入数组`, [8], Array(arr.length).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === k ? BAR_COLOR_SWAPPING : c));
             } else {
                 arr[k] = right[j];
                 j++;
-                recordStep(arr, `${right[j - 1]} 较小，放入数组`, [8], Array(arr.length).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === k? BAR_COLOR_SWAPPING : c));
+                recordStep(arr, `${right[j - 1]} 较小，放入数组`, [8], Array(arr.length).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === k ? BAR_COLOR_SWAPPING : c));
             }
             k++;
         }
@@ -415,14 +415,14 @@ function mergeSortAlgorithm(arr) {
             arr[k] = left[i];
             i++;
             k++;
-            recordStep(arr, `将剩余左子数组元素 ${left[i - 1]} 放入数组`, [10], Array(arr.length).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === k - 1? BAR_COLOR_SWAPPING : c));
+            recordStep(arr, `将剩余左子数组元素 ${left[i - 1]} 放入数组`, [10], Array(arr.length).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === k - 1 ? BAR_COLOR_SWAPPING : c));
         }
 
         while (j < right.length) {
             arr[k] = right[j];
             j++;
             k++;
-            recordStep(arr, `将剩余右子数组元素 ${right[j - 1]} 放入数组`, [10], Array(arr.length).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === k - 1? BAR_COLOR_SWAPPING : c));
+            recordStep(arr, `将剩余右子数组元素 ${right[j - 1]} 放入数组`, [10], Array(arr.length).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === k - 1 ? BAR_COLOR_SWAPPING : c));
         }
     }
     if (arr.length === 1) {
@@ -460,7 +460,7 @@ function bucketSortAlgorithm(arr) {
 
     for (let i = 0; i < n; i++) {
         const bucketIndex = Math.floor((arr[i] - min) / bucketSize);
-        recordStep(arr, `将 ${arr[i]} 放入桶 ${bucketIndex}`, [5], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === i? BAR_COLOR_SWAPPING : c));
+        recordStep(arr, `将 ${arr[i]} 放入桶 ${bucketIndex}`, [5], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === i ? BAR_COLOR_SWAPPING : c));
         buckets[bucketIndex].push(arr[i]);
     }
 
@@ -472,7 +472,7 @@ function bucketSortAlgorithm(arr) {
     let index = 0;
     for (let i = 0; i < bucketCount; i++) {
         for (let j = 0; j < buckets[i].length; j++) {
-            recordStep(arr, `将桶 ${i} 中的 ${buckets[i][j]} 放回原数组`, [9], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === index? BAR_COLOR_SWAPPING : c));
+            recordStep(arr, `将桶 ${i} 中的 ${buckets[i][j]} 放回原数组`, [9], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === index ? BAR_COLOR_SWAPPING : c));
             arr[index++] = buckets[i][j];
         }
     }
@@ -495,7 +495,7 @@ function radixSortAlgorithm(arr) {
         recordStep(arr, `按第 ${pos} 位数字分配到桶`, [5], Array(arr.length).fill(BAR_COLOR_DEFAULT));
         for (let num of arr) {
             const digit = getDigit(num, pos);
-            recordStep(arr, `数字 ${num} 的第 ${pos} 位: ${digit}`, [7], Array(arr.length).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === arr.indexOf(num)? BAR_COLOR_COMPARING : c));
+            recordStep(arr, `数字 ${num} 的第 ${pos} 位: ${digit}`, [7], Array(arr.length).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === arr.indexOf(num) ? BAR_COLOR_COMPARING : c));
             buckets[digit].push(num);
         }
         recordStep(arr, `收集桶中的元素`, [9], Array(arr.length).fill(BAR_COLOR_DEFAULT));
@@ -518,14 +518,14 @@ function countingSortAlgorithm(arr) {
     recordStep(arr, `创建计数数组，范围 [${min}, ${max}]`, [3], Array(arr.length).fill(BAR_COLOR_DEFAULT));
 
     for (let num of arr) {
-        recordStep(arr, `统计 ${num} 的出现次数`, [5], Array(arr.length).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === arr.indexOf(num)? BAR_COLOR_COMPARING : c));
+        recordStep(arr, `统计 ${num} 的出现次数`, [5], Array(arr.length).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === arr.indexOf(num) ? BAR_COLOR_COMPARING : c));
         countArray[num - min]++;
     }
 
     let index = 0;
     for (let i = 0; i < range; i++) {
         while (countArray[i] > 0) {
-            recordStep(arr, `将 ${i + min} 放回原数组`, [7], Array(arr.length).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === index? BAR_COLOR_SWAPPING : c));
+            recordStep(arr, `将 ${i + min} 放回原数组`, [7], Array(arr.length).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === index ? BAR_COLOR_SWAPPING : c));
             arr[index++] = i + min;
             countArray[i]--;
         }
@@ -718,8 +718,8 @@ function initialize() {
     const arrayCopy = [...initialArray]; // 使用原始数组的副本
 
     // 根据选择的算法预计算所有步骤
-switch (currentAlgorithm) {
-        case'selectionSort':
+    switch (currentAlgorithm) {
+        case 'selectionSort':
             selectionSortAlgorithm(arrayCopy);
             break;
         case 'bubbleSort':
@@ -731,7 +731,7 @@ switch (currentAlgorithm) {
         case 'quickSort':
             quickSortAlgorithm(arrayCopy);
             break;
-        case'mergeSort':
+        case 'mergeSort':
             mergeSortAlgorithm(arrayCopy);
             break;
         case 'bucketSort':
@@ -743,7 +743,7 @@ switch (currentAlgorithm) {
         case 'radixSort':
             radixSortAlgorithm(arrayCopy);
             break;
-        case'shellSort':
+        case 'shellSort':
             shellSortAlgorithm(arrayCopy);
             break;
         case 'heapSort':
@@ -889,13 +889,13 @@ startButton.addEventListener('click', () => {
     const intervalTime = document.getElementById('interval-time').value;
     // 停止之前的动画（如果存在）
     stopAnimation();
-    
+
     // 如果已经在最后一步，则重置到第一步
     if (currentStepIndex >= steps.length - 1) {
         currentStepIndex = 0;
         updateVisualization();
     }
-    
+
     // 设置间隔1.5秒自动排序
     animationInterval = setInterval(() => {
         if (currentStepIndex < steps.length - 1) {
