@@ -8,11 +8,15 @@ let animationInterval = null; // 动画定时器
 
 // 获取DOM元素
 const algorithmSelect = document.getElementById('algorithm-select');
+const submitButton = document.getElementById('submit-button');
+const compareButton = document.getElementById('compare-button');
+
 const startButton = document.getElementById('start-button');
 const resetButton = document.getElementById('reset-button');
 const prevButton = document.getElementById('prev-button');
 const nextButton = document.getElementById('next-button');
 const stopButton = document.getElementById('stop-button');
+
 const codeDisplay = document.getElementById('code-display');
 const currentStepNumberSpan = document.getElementById('current-step-number');
 const totalStepsSpan = document.getElementById('total-steps');
@@ -22,9 +26,14 @@ const chartContainer = document.getElementById('chart-container');
 // 原始数组，用于重置
 let initialArray = [9, 2, 7, 5, 1, 8, 3, 10, 4, 6];
 
-document.getElementById('submit-button').addEventListener('click', () => {
+submitButton.addEventListener('click', () => {
     initialArray = document.getElementById('input-data').value.split(',').map(Number);
     initialize();
+})
+
+compareButton.addEventListener('click', () => {
+    // 跳转到排序算法对比界面3x3界面完整展示前9个排序算法，，只有自动排序和停止排序两个按钮，可以设置排序间隔时间
+
 })
 
 // 存储算法代码，用于高亮显示
