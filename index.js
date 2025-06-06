@@ -32,9 +32,19 @@ submitButton.addEventListener('click', () => {
 })
 
 compareButton.addEventListener('click', () => {
-    // 跳转到排序算法对比界面3x3界面完整展示前9个排序算法，，只有自动排序和停止排序两个按钮，可以设置排序间隔时间
-
-})
+    // 保存当前选择的排序算法和间隔时间到 localStorage
+    localStorage.setItem('selectedAlgorithms', JSON.stringify([
+        'selectionSort', 'bubbleSort', 'insertionSort',
+        'mergeSort', 'quickSort', 'heapSort',
+        'shellSort', 'countingSort', 'radixSort'
+    ]));
+    
+    const intervalTime = document.getElementById('interval-time').value;
+    localStorage.setItem('intervalTime', intervalTime);
+    
+    // 跳转到排序算法对比界面
+    window.location.href = 'compare.html';
+});
 
 // 存储算法代码，用于高亮显示
 const algorithmCodes = {
