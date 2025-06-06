@@ -8,6 +8,7 @@ let animationInterval = null; // 动画定时器
 
 // 获取DOM元素
 const algorithmSelect = document.getElementById('algorithm-select');
+const startButton = document.getElementById('start-button');
 const resetButton = document.getElementById('reset-button');
 const prevButton = document.getElementById('prev-button');
 const nextButton = document.getElementById('next-button');
@@ -474,6 +475,27 @@ algorithmSelect.addEventListener('change', (event) => {
     initialize();
 });
 
+startButton.addEventListener('click', () => {
+    // 停止之前的动画（如果存在）
+    stopAnimation();
+    
+    // 如果已经在最后一步，则重置到第一步
+    if (currentStepIndex >= steps.length - 1) {
+        currentStepIndex = 0;
+        updateVisualization();
+    }
+    
+    // 设置间隔1.5秒自动排序
+    animationInterval = setInterval(() => {
+        if (currentStepIndex < steps.length - 1) {
+            currentStepIndex++;
+            updateVisualization();
+        } else {
+            // 如果到达最后一步，停止动画
+            stopAnimation();
+        }
+    }, 1500);
+});
 resetButton.addEventListener('click', () => {
     initialize();
 });
@@ -494,9 +516,9 @@ nextButton.addEventListener('click', () => {
     }
 });
 
-// stopButton.addEventListener('click', () => {
-//     stopAnimation();
-// });
+stopButton.addEventListener('click', () => {
+    stopAnimation();
+});
 
 // 页面加载完成后初始化
 window.onload = () => {
