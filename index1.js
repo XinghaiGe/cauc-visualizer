@@ -1,6 +1,6 @@
 
 // 定义全局变量
-let currentAlgorithm = 'shellSort'; // 当前选择的算法
+let currentAlgorithm = 'selectionSort'; // 当前选择的算法
 let steps = []; // 存储所有算法步骤的数组
 let currentStepIndex = 0; // 当前步骤的索引
 let chart = null; // CanvasJS 图表实例
@@ -29,6 +29,150 @@ document.getElementById('submit-button').addEventListener('click', () => {
 
 // 存储算法代码，用于高亮显示
 const algorithmCodes = {
+    selectionSort: `
+function selectionSort(arr) {
+    const n = arr.length;
+    for (let i = 0; i < n - 1; i++) {
+        let minIndex = i;
+        for (let j = i + 1; j < n; j++) {
+            if (arr[j] < arr[minIndex]) {
+                minIndex = j;
+            }
+        }
+        [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
+    }
+    return arr;
+}
+            `,
+    bubbleSort: `
+function bubbleSort(arr) {
+    const n = arr.length;
+    for (let i = 0; i < n - 1; i++) {
+        for (let j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+            }
+        }
+    }
+    return arr;
+}
+            `,
+    insertionSort: `
+function insertionSort(arr) {
+    const n = arr.length;
+    for (let i = 1; i < n; i++) {
+        const key = arr[i];
+        let j = i - 1;
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+    return arr;
+}
+            `,
+    mergeSort: `
+function mergeSort(arr) {
+    if (arr.length > 1) {
+        const mid = Math.floor(arr.length / 2);
+        const left = arr.slice(0, mid);
+        const right = arr.slice(mid);
+
+        mergeSort(left);
+        mergeSort(right);
+
+        let i = 0, j = 0, k = 0;
+        while (i < left.length && j < right.length) {
+            if (left[i] < right[j]) {
+                arr[k] = left[i];
+                i++;
+            } else {
+                arr[k] = right[j];
+                j++;
+            }
+            k++;
+        }
+
+        while (i < left.length) {
+            arr[k] = left[i];
+            i++;
+            k++;
+        }
+
+        while (j < right.length) {
+            arr[k] = right[j];
+            j++;
+            k++;
+        }
+    }
+    return arr;
+}
+            `,
+    bucketSort: `
+function bucketSort(arr) {
+    const n = arr.length;
+    const max = Math.max(...arr);
+    const min = Math.min(...arr);
+    const bucketSize = 5; // 桶的大小（可根据实际情况调整）
+    const bucketCount = Math.floor((max - min) / bucketSize) + 1;
+    const buckets = new Array(bucketCount).fill(null).map(() => []);
+
+    for (let i = 0; i < n; i++) {
+        const bucketIndex = Math.floor((arr[i] - min) / bucketSize);
+        buckets[bucketIndex].push(arr[i]);
+    }
+
+    for (let i = 0; i < bucketCount; i++) {
+        buckets[i].sort((a, b) => a - b);
+    }
+
+    let index = 0;
+    for (let i = 0; i < bucketCount; i++) {
+        for (let j = 0; j < buckets[i].length; j++) {
+            arr[index++] = buckets[i][j];
+        }
+    }
+    return arr;
+}
+            `,
+    countingSort: `
+function countingSort(arr) {
+    const max = Math.max(...arr);
+    const min = Math.min(...arr);
+    const range = max - min + 1;
+    const countArray = new Array(range).fill(0);
+
+    for (let num of arr) {
+        countArray[num - min]++;
+    }
+
+    let index = 0;
+    for (let i = 0; i < range; i++) {
+        while (countArray[i] > 0) {
+            arr[index++] = i + min;
+            countArray[i]--;
+        }
+    }
+    return arr;
+}
+            `,
+    radixSort: `
+function radixSort(arr) {
+    const getDigit = (num, pos) => Math.floor(Math.abs(num) / Math.pow(10, pos)) % 10;
+    const maxDigit = Math.max(...arr).toString().length;
+
+    for (let pos = 0; pos < maxDigit; pos++) {
+        const buckets = Array.from({ length: 10 }, () => []);
+        for (let num of arr) {
+            const digit = getDigit(num, pos);
+            buckets[digit].push(num);
+        }
+        arr = [].concat(...buckets);
+    }
+    return arr;
+}
+            `,
     shellSort: `
 function shellSort(arr) {
     let n = arr.length;
@@ -124,7 +268,6 @@ function partition(arr, low, high) {
 }
             `
 };
-
 // 颜色定义
 const BAR_COLOR_DEFAULT = '#a0aec0'; // 默认灰色
 const BAR_COLOR_COMPARING = '#fcd34d'; // 黄色
@@ -147,6 +290,231 @@ function recordStep(currentArray, description, highlightLines = [], barColors = 
         barColors: barColors.length > 0 ? [...barColors] : Array(currentArray.length).fill(BAR_COLOR_DEFAULT)
     });
 }
+
+/**
+ * 选择排序算法实现，并记录每一步
+ * @param {Array<number>} arr - 待排序数组
+ */
+function selectionSortAlgorithm(arr) {
+    const n = arr.length;
+    recordStep(arr, "开始选择排序", [1, 2], Array(n).fill(BAR_COLOR_DEFAULT));
+
+    for (let i = 0; i < n - 1; i++) {
+        let minIndex = i;
+        recordStep(arr, `寻找第 ${i + 1} 轮最小元素 (当前最小索引: ${minIndex})`, [3], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === minIndex? BAR_COLOR_COMPARING : c));
+        for (let j = i + 1; j < n; j++) {
+            recordStep(arr, `比较 ${arr[j]} 和 ${arr[minIndex]}`, [5], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => (idx === j || idx === minIndex)? BAR_COLOR_COMPARING : c));
+            if (arr[j] < arr[minIndex]) {
+                minIndex = j;
+                recordStep(arr, `更新最小索引为 ${minIndex}`, [6], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === minIndex? BAR_COLOR_COMPARING : c));
+            }
+        }
+        recordStep(arr, `交换 ${arr[i]} 和 ${arr[minIndex]}`, [8], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => (idx === i || idx === minIndex)? BAR_COLOR_SWAPPING : c));
+        [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
+        recordStep(arr, `交换完成，元素 ${arr[i]} 已排序`, [8], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx <= i? BAR_COLOR_SORTED : c));
+    }
+    recordStep(arr, "选择排序完成", [9], Array(n).fill(BAR_COLOR_SORTED));
+}
+
+/**
+ * 冒泡排序算法实现，并记录每一步
+ * @param {Array<number>} arr - 待排序数组
+ */
+function bubbleSortAlgorithm(arr) {
+    const n = arr.length;
+    recordStep(arr, "开始冒泡排序", [1, 2], Array(n).fill(BAR_COLOR_DEFAULT));
+
+    for (let i = 0; i < n - 1; i++) {
+        for (let j = 0; j < n - i - 1; j++) {
+            recordStep(arr, `比较 ${arr[j]} 和 ${arr[j + 1]}`, [4], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => (idx === j || idx === j + 1)? BAR_COLOR_COMPARING : c));
+            if (arr[j] > arr[j + 1]) {
+                recordStep(arr, `交换 ${arr[j]} 和 ${arr[j + 1]}`, [6], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => (idx === j || idx === j + 1)? BAR_COLOR_SWAPPING : c));
+                [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+                recordStep(arr, `交换完成`, [6], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => (idx === j || idx === j + 1)? BAR_COLOR_SWAPPING : c));
+            }
+        }
+        recordStep(arr, `第 ${i + 1} 轮冒泡完成，最大元素已移到末尾`, [8], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx >= n - i - 1? BAR_COLOR_SORTED : c));
+    }
+    recordStep(arr, "冒泡排序完成", [9], Array(n).fill(BAR_COLOR_SORTED));
+}
+
+/**
+ * 插入排序算法实现，并记录每一步
+ * @param {Array<number>} arr - 待排序数组
+ */
+function insertionSortAlgorithm(arr) {
+    const n = arr.length;
+    recordStep(arr, "开始插入排序", [1, 2], Array(n).fill(BAR_COLOR_DEFAULT));
+
+    for (let i = 1; i < n; i++) {
+        const key = arr[i];
+        let j = i - 1;
+        recordStep(arr, `将元素 ${key} (索引 ${i}) 插入到已排序部分`, [3], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === i? BAR_COLOR_COMPARING : c));
+        while (j >= 0 && arr[j] > key) {
+            recordStep(arr, `比较 ${arr[j]} 和 ${key}`, [5], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => (idx === j || idx === i)? BAR_COLOR_COMPARING : c));
+            arr[j + 1] = arr[j];
+            recordStep(arr, `元素 ${arr[j]} (索引 ${j}) 后移到索引 ${j + 1}`, [6], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === j + 1? BAR_COLOR_SWAPPING : c));
+            j--;
+        }
+        arr[j + 1] = key;
+        recordStep(arr, `将 ${key} 插入到索引 ${j + 1}`, [8], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === j + 1? BAR_COLOR_SWAPPING : c));
+    }
+    recordStep(arr, "插入排序完成", [9], Array(n).fill(BAR_COLOR_SORTED));
+}
+
+/**
+ * 归并排序算法实现，并记录每一步
+ * @param {Array<number>} arr - 待排序数组
+ */
+function mergeSortAlgorithm(arr) {
+    if (arr.length > 1) {
+        const mid = Math.floor(arr.length / 2);
+        const left = arr.slice(0, mid);
+        const right = arr.slice(mid);
+
+        recordStep(arr, `分割数组为左子数组 [${left}] 和右子数组 [${right}]`, [3], Array(arr.length).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx < mid? BAR_COLOR_COMPARING : BAR_COLOR_DEFAULT));
+        mergeSortAlgorithm(left);
+        mergeSortAlgorithm(right);
+
+        let i = 0, j = 0, k = 0;
+        recordStep(arr, "合并左子数组和右子数组", [5], Array(arr.length).fill(BAR_COLOR_DEFAULT));
+        while (i < left.length && j < right.length) {
+            recordStep(arr, `比较 ${left[i]} 和 ${right[j]}`, [7], Array(arr.length).fill(BAR_COLOR_DEFAULT).map((c, idx) => (idx === k? BAR_COLOR_COMPARING : c)));
+            if (left[i] < right[j]) {
+                arr[k] = left[i];
+                i++;
+                recordStep(arr, `${left[i - 1]} 较小，放入数组`, [8], Array(arr.length).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === k? BAR_COLOR_SWAPPING : c));
+            } else {
+                arr[k] = right[j];
+                j++;
+                recordStep(arr, `${right[j - 1]} 较小，放入数组`, [8], Array(arr.length).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === k? BAR_COLOR_SWAPPING : c));
+            }
+            k++;
+        }
+
+        while (i < left.length) {
+            arr[k] = left[i];
+            i++;
+            k++;
+            recordStep(arr, `将剩余左子数组元素 ${left[i - 1]} 放入数组`, [10], Array(arr.length).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === k - 1? BAR_COLOR_SWAPPING : c));
+        }
+
+        while (j < right.length) {
+            arr[k] = right[j];
+            j++;
+            k++;
+            recordStep(arr, `将剩余右子数组元素 ${right[j - 1]} 放入数组`, [10], Array(arr.length).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === k - 1? BAR_COLOR_SWAPPING : c));
+        }
+    }
+    if (arr.length === 1) {
+        recordStep(arr, `单个元素 ${arr[0]} 视为已排序`, [11], Array(arr.length).fill(BAR_COLOR_SORTED));
+    } else if (arr.length > 1) {
+        recordStep(arr, `数组 [${arr}] 合并完成`, [12], Array(arr.length).fill(BAR_COLOR_DEFAULT));
+    }
+    if (arr.length === initialArray.length && isSorted(arr)) {
+        recordStep(arr, "归并排序完成", [13], Array(arr.length).fill(BAR_COLOR_SORTED));
+    }
+}
+
+// 辅助函数：检查数组是否已排序
+function isSorted(arr) {
+    for (let i = 0; i < arr.length - 1; i++) {
+        if (arr[i] > arr[i + 1]) return false;
+    }
+    return true;
+}
+
+/**
+ * 桶排序算法实现，并记录每一步
+ * @param {Array<number>} arr - 待排序数组
+ */
+function bucketSortAlgorithm(arr) {
+    const n = arr.length;
+    const max = Math.max(...arr);
+    const min = Math.min(...arr);
+    const bucketSize = 5; // 桶大小（可调整）
+    const bucketCount = Math.floor((max - min) / bucketSize) + 1;
+    const buckets = new Array(bucketCount).fill(null).map(() => []);
+
+    recordStep(arr, "开始桶排序", [1, 2], Array(n).fill(BAR_COLOR_DEFAULT));
+    recordStep(arr, `创建 ${bucketCount} 个桶，桶大小为 ${bucketSize}`, [3], Array(n).fill(BAR_COLOR_DEFAULT));
+
+    for (let i = 0; i < n; i++) {
+        const bucketIndex = Math.floor((arr[i] - min) / bucketSize);
+        recordStep(arr, `将 ${arr[i]} 放入桶 ${bucketIndex}`, [5], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === i? BAR_COLOR_SWAPPING : c));
+        buckets[bucketIndex].push(arr[i]);
+    }
+
+    for (let i = 0; i < bucketCount; i++) {
+        recordStep(arr, `对桶 ${i} [${buckets[i]}] 进行排序`, [7], Array(n).fill(BAR_COLOR_DEFAULT));
+        buckets[i].sort((a, b) => a - b);
+    }
+
+    let index = 0;
+    for (let i = 0; i < bucketCount; i++) {
+        for (let j = 0; j < buckets[i].length; j++) {
+            recordStep(arr, `将桶 ${i} 中的 ${buckets[i][j]} 放回原数组`, [9], Array(n).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === index? BAR_COLOR_SWAPPING : c));
+            arr[index++] = buckets[i][j];
+        }
+    }
+    recordStep(arr, "桶排序完成", [10], Array(n).fill(BAR_COLOR_SORTED));
+}
+
+/**
+ * 基数排序算法实现，并记录每一步
+ * @param {Array<number>} arr - 待排序数组
+ */
+function radixSortAlgorithm(arr) {
+    const getDigit = (num, pos) => Math.floor(Math.abs(num) / Math.pow(10, pos)) % 10;
+    const maxDigit = Math.max(...arr).toString().length;
+
+    recordStep(arr, "开始基数排序", [1, 2], Array(arr.length).fill(BAR_COLOR_DEFAULT));
+    recordStep(arr, `最大位数: ${maxDigit}`, [3], Array(arr.length).fill(BAR_COLOR_DEFAULT));
+
+    for (let pos = 0; pos < maxDigit; pos++) {
+        const buckets = Array.from({ length: 10 }, () => []);
+        recordStep(arr, `按第 ${pos} 位数字分配到桶`, [5], Array(arr.length).fill(BAR_COLOR_DEFAULT));
+        for (let num of arr) {
+            const digit = getDigit(num, pos);
+            recordStep(arr, `数字 ${num} 的第 ${pos} 位: ${digit}`, [7], Array(arr.length).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === arr.indexOf(num)? BAR_COLOR_COMPARING : c));
+            buckets[digit].push(num);
+        }
+        recordStep(arr, `收集桶中的元素`, [9], Array(arr.length).fill(BAR_COLOR_DEFAULT));
+        arr = [].concat(...buckets);
+    }
+    recordStep(arr, "基数排序完成", [10], Array(arr.length).fill(BAR_COLOR_SORTED));
+}
+
+/**
+ * 计数排序算法实现，并记录每一步
+ * @param {Array<number>} arr - 待排序数组
+ */
+function countingSortAlgorithm(arr) {
+    const max = Math.max(...arr);
+    const min = Math.min(...arr);
+    const range = max - min + 1;
+    const countArray = new Array(range).fill(0);
+
+    recordStep(arr, "开始计数排序", [1, 2], Array(arr.length).fill(BAR_COLOR_DEFAULT));
+    recordStep(arr, `创建计数数组，范围 [${min}, ${max}]`, [3], Array(arr.length).fill(BAR_COLOR_DEFAULT));
+
+    for (let num of arr) {
+        recordStep(arr, `统计 ${num} 的出现次数`, [5], Array(arr.length).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === arr.indexOf(num)? BAR_COLOR_COMPARING : c));
+        countArray[num - min]++;
+    }
+
+    let index = 0;
+    for (let i = 0; i < range; i++) {
+        while (countArray[i] > 0) {
+            recordStep(arr, `将 ${i + min} 放回原数组`, [7], Array(arr.length).fill(BAR_COLOR_DEFAULT).map((c, idx) => idx === index? BAR_COLOR_SWAPPING : c));
+            arr[index++] = i + min;
+            countArray[i]--;
+        }
+    }
+    recordStep(arr, "计数排序完成", [8], Array(arr.length).fill(BAR_COLOR_SORTED));
+}
+
+
 
 /**
  * 希尔排序算法实现，并记录每一步
@@ -331,16 +699,39 @@ function initialize() {
     const arrayCopy = [...initialArray]; // 使用原始数组的副本
 
     // 根据选择的算法预计算所有步骤
-    switch (currentAlgorithm) {
-        case 'shellSort':
+switch (currentAlgorithm) {
+        case'selectionSort':
+            selectionSortAlgorithm(arrayCopy);
+            break;
+        case 'bubbleSort':
+            bubbleSortAlgorithm(arrayCopy);
+            break;
+        case 'insertionSort':
+            insertionSortAlgorithm(arrayCopy);
+            break;
+        case 'quickSort':
+            quickSortAlgorithm(arrayCopy);
+            break;
+        case'mergeSort':
+            mergeSortAlgorithm(arrayCopy);
+            break;
+        case 'bucketSort':
+            bucketSortAlgorithm(arrayCopy);
+            break;
+        case 'countingSort':
+            countingSortAlgorithm(arrayCopy);
+            break;
+        case 'radixSort':
+            radixSortAlgorithm(arrayCopy);
+            break;
+        case'shellSort':
             shellSortAlgorithm(arrayCopy);
             break;
         case 'heapSort':
             heapSortAlgorithm(arrayCopy);
             break;
-        case 'quickSort':
-            quickSortAlgorithm(arrayCopy);
-            break;
+        default:
+            console.error('无效的排序算法');
     }
 
     totalStepsSpan.textContent = steps.length; // 更新总步骤数
